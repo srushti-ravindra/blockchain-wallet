@@ -79,4 +79,4 @@ This experiment successfully demonstrates a decentralized wallet system using bl
 ---
 
 ## 📌 Author
-Student Project – Blockchain Experiment
+Student Project by Srushti Ravindra – Blockchain Experiment
