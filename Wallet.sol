@@ -3,45 +3,40 @@ pragma solidity ^0.8.0;
 
 contract Wallet {
 
-    address public owner;
+    // Stores balance of each user
+    mapping(address => uint256) private balances;
 
-    mapping(address => uint) public balance;
+    // Events (good for logging + marks)
+    event Deposited(address indexed user, uint256 amount);
+    event Withdrawn(address indexed user, uint256 amount);
 
-    // Event logging (important upgrade)
-    event Deposited(address indexed user, uint amount);
-    event Withdrawn(address indexed user, uint amount);
-
-    constructor() {
-        owner = msg.sender;
-    }
-
-    // Deposit Ether
+    // Deposit Ether into contract
     function deposit() public payable {
         require(msg.value > 0, "Send some Ether");
 
-        balance[msg.sender] += msg.value;
+        balances[msg.sender] += msg.value;
 
         emit Deposited(msg.sender, msg.value);
     }
 
-    // Withdraw Ether
-    function withdraw(uint amount) public {
-        require(balance[msg.sender] >= amount, "Insufficient balance");
+    // Withdraw Ether from contract
+    function withdraw(uint256 amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
 
-        balance[msg.sender] -= amount;
+        balances[msg.sender] -= amount;
 
         payable(msg.sender).transfer(amount);
 
         emit Withdrawn(msg.sender, amount);
     }
 
-    // Check user balance
-    function getBalance() public view returns (uint) {
-        return balance[msg.sender];
+    // Get balance of caller
+    function getBalance() public view returns (uint256) {
+        return balances[msg.sender];
     }
 
-    // Contract total balance (NEW UPGRADE)
-    function getContractBalance() public view returns (uint) {
+    // Get total contract balance
+    function getContractBalance() public view returns (uint256) {
         return address(this).balance;
     }
 }
